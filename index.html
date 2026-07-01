@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="Real-time GPU particle-mesh spring simulation rendered with WebGPU and Three.js TSL compute shaders. Drag nodes to disrupt the cloth."
+    />
+    <title>WebGPU Spring Mesh · interactive cloth solver</title>
+  </head>
+  <body>
+    <div id="vignette" aria-hidden="true"></div>
+
+    <div id="loading" class="loading" role="status" aria-live="polite">
+      <div class="loading__spinner" aria-hidden="true"></div>
+      <p class="loading__text">Initializing GPU solver…</p>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

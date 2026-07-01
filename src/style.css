@@ -1,0 +1,465 @@
+/* ===========================================================================
+   WebGPU Spring Mesh — UI styling
+   Hand-written CSS (deliberate deviation from the Tailwind default): the whole
+   UI is one control panel + overlays, so a single scoped stylesheet is clearer
+   and keeps the bundle to three.js only. Colour tokens are centralized below.
+   =========================================================================== */
+
+:root {
+  /* surfaces */
+  --bg-0: #05070d;
+  --panel: rgba(13, 17, 28, 0.72);
+  --panel-solid: #0d111c;
+  --hair: rgba(255, 255, 255, 0.09);
+  --hair-strong: rgba(255, 255, 255, 0.16);
+
+  /* text (>= 4.5:1 on panel for primary, >= 3:1 for secondary) */
+  --ink: #e9eef6;
+  --ink-dim: #9fadc4;
+  --ink-faint: #6c7a91;
+
+  /* accents */
+  --accent: #22d3ee;
+  --accent-2: #f472b6;
+  --accent-press: #67e8f9;
+  --danger: #fb7185;
+
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow: 0 18px 50px -18px rgba(0, 0, 0, 0.8);
+  --font-ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg-0);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+canvas {
+  position: fixed;
+  inset: 0;
+  display: block;
+  touch-action: none; /* let the dragger own pointer gestures */
+  cursor: grab;
+}
+
+/* Radial vignette for depth; never intercepts pointer events. */
+#vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 8%, rgba(34, 211, 238, 0.07), transparent 55%),
+    radial-gradient(140% 120% at 50% 120%, rgba(0, 0, 0, 0.65), transparent 60%);
+}
+
+/* ----------------------------------------------------------------- loading */
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-content: center;
+  gap: 18px;
+  justify-items: center;
+  background: var(--bg-0);
+  transition: opacity 0.5s ease;
+}
+.loading--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.loading__spinner {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--hair-strong);
+  border-top-color: var(--accent);
+  animation: spin 0.9s linear infinite;
+}
+.loading__text {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------------------------------------------- panel */
+.panel {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 304px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  backdrop-filter: blur(20px) saturate(1.3);
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+}
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 12px;
+  border-bottom: 1px solid var(--hair);
+}
+.panel__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.panel__sub {
+  margin: 2px 0 0;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.panel__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  flex: none;
+}
+.panel__collapse {
+  margin-left: auto;
+}
+
+.panel__body {
+  padding: 4px 14px 14px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hair-strong) transparent;
+}
+.panel.is-collapsed .panel__body {
+  display: none;
+}
+
+.section {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.section:last-child {
+  border-bottom: 0;
+  padding-bottom: 2px;
+}
+.section__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+
+/* ------------------------------------------------------------------ slider */
+.ctl {
+  display: block;
+  padding: 5px 0;
+}
+.ctl__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+.ctl__name {
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.ctl__val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px; /* generous hit area */
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 4px;
+  background: var(--hair-strong);
+}
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 4px;
+  background: var(--hair-strong);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -7px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--panel-solid);
+  box-shadow: 0 0 0 1px var(--accent), 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.12s ease;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--panel-solid);
+}
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.18);
+}
+
+/* --------------------------------------------------------------- segmented */
+.seg {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--hair);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+}
+.seg__btn {
+  flex: 1;
+  min-height: 34px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-dim);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease;
+}
+.seg__btn[aria-pressed="true"] {
+  background: rgba(34, 211, 238, 0.16);
+  color: var(--accent-press);
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------- toggle */
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 40px;
+  cursor: pointer;
+}
+.toggle__name {
+  font-size: 12.5px;
+}
+.switch {
+  position: relative;
+  width: 40px;
+  height: 23px;
+  border-radius: 999px;
+  border: 1px solid var(--hair-strong);
+  background: rgba(255, 255, 255, 0.06);
+  flex: none;
+  transition: background 0.18s ease;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--ink-dim);
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+.toggle[aria-pressed="true"] .switch {
+  background: rgba(34, 211, 238, 0.25);
+  border-color: var(--accent);
+}
+.toggle[aria-pressed="true"] .switch::after {
+  transform: translateX(17px);
+  background: var(--accent);
+}
+
+/* ----------------------------------------------------------------- buttons */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.btn {
+  flex: 1;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid var(--hair-strong);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.08s ease;
+}
+.btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+}
+.btn--icon {
+  flex: none;
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-radius: 8px;
+}
+
+/* ------------------------------------------------------------------ stats */
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.stat__k {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.stat__v {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.stat__v.is-good {
+  color: var(--accent);
+}
+.stat__v.is-warn {
+  color: var(--danger);
+}
+
+/* -------------------------------------------------------------------- hint */
+.hint {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  max-width: calc(100vw - 32px);
+  background: var(--panel);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+.hint b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.hint svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1.7;
+  flex: none;
+}
+
+/* --------------------------------------------------------------- a11y / fx */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (max-width: 720px) {
+  .panel {
+    top: auto;
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    max-height: 62dvh;
+  }
+  .hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::after,
+  *::before {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

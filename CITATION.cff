@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "WebGPU Spring Mesh: an interactive GPU particle-mesh spring simulation"
+abstract: >-
+  A real-time, GPU-resident mass-spring cloth simulation rendered in the browser
+  with WebGPU compute shaders authored in Three.js TSL, with interactive
+  node dragging and an automatic CPU/WebGL2 fallback.
+type: software
+authors:
+  - family-names: Holz
+    given-names: Erik
+keywords:
+  - WebGPU
+  - Three.js
+  - TSL
+  - mass-spring system
+  - cloth simulation
+  - physics simulation
+  - GPU compute
+license: MIT
+references:
+  - type: article
+    title: "Position Based Dynamics"
+    authors:
+      - family-names: Müller
+        given-names: Matthias
+      - family-names: Heidelberger
+        given-names: Bruno
+      - family-names: Hennix
+        given-names: Marcus
+      - family-names: Ratcliff
+        given-names: John
+    year: 2007
+    collection-title: "Journal of Visual Communication and Image Representation"
+  - type: article
+    title: "Small Steps in Physics Simulation"
+    authors:
+      - family-names: Macklin
+        given-names: Miles
+      - family-names: Müller
+        given-names: Matthias
+      - family-names: Chentanez
+        given-names: Nuttapong
+    year: 2019
+    collection-title: "ACM SIGGRAPH / Eurographics Symposium on Computer Animation"
+  - type: article
+    title: "Deformation constraints in a mass-spring model to describe rigid cloth behaviour"
+    authors:
+      - family-names: Provot
+        given-names: Xavier
+    year: 1995
+    collection-title: "Graphics Interface"
