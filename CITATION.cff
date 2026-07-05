@@ -7,7 +7,7 @@ abstract: >-
   node dragging and an automatic CPU/WebGL2 fallback.
 type: software
 authors:
-  - family-names: Holz
+  - family-names: Löffelholz
     given-names: Erik
 keywords:
   - WebGPU
@@ -18,6 +18,9 @@ keywords:
   - physics simulation
   - GPU compute
 license: MIT
+version: 0.1.0
+date-released: "2026-07-05"
+repository-code: "https://github.com/erik2810/webgpu-spring-mesh"
 references:
   - type: article
     title: "Position Based Dynamics"
