@@ -2,6 +2,8 @@
 
 **[▶ Live demo](https://erik2810.github.io/webgpu-spring-mesh/)** (requires a WebGPU- or WebGL2-capable browser)
 
+![Cloth solver running in the browser](assets/demo.gif)
+
 A real-time, GPU-resident particle–mesh spring simulation rendered in the browser
 with **WebGPU compute shaders** authored in **Three.js TSL** (Three Shading
 Language). A structured lattice of point masses is connected by structural, shear,
