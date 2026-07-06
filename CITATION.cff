@@ -18,8 +18,8 @@ keywords:
   - physics simulation
   - GPU compute
 license: MIT
-version: 0.1.0
-date-released: "2026-07-05"
+version: 0.1.1
+date-released: "2026-07-06"
 repository-code: "https://github.com/erik2810/webgpu-spring-mesh"
 references:
   - type: article

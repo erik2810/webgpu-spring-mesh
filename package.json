@@ -1,7 +1,7 @@
 {
   "name": "webgpu-spring-mesh",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Real-time GPU particle-mesh spring simulation (WebGPU + Three.js TSL) with interactive node dragging and a CPU/WebGL fallback.",
   "scripts": {
