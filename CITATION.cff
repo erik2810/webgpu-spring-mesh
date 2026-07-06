@@ -20,7 +20,15 @@ keywords:
 license: MIT
 version: 0.1.1
 date-released: "2026-07-06"
+doi: 10.5281/zenodo.21214824
 repository-code: "https://github.com/erik2810/webgpu-spring-mesh"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21214824
+    description: "Concept DOI (all versions)"
+  - type: doi
+    value: 10.5281/zenodo.21214825
+    description: "Version 0.1.1"
 references:
   - type: article
     title: "Position Based Dynamics"

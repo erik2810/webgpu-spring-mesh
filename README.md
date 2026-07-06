@@ -1,5 +1,8 @@
 # WebGPU Spring Mesh
 
+[![License](https://img.shields.io/badge/license-MIT-1E40AF)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21214824.svg)](https://doi.org/10.5281/zenodo.21214824)
+
 **[▶ Live demo](https://erik2810.github.io/webgpu-spring-mesh/)** (requires a WebGPU- or WebGL2-capable browser)
 
 ![Cloth solver running in the browser](assets/demo.gif)
